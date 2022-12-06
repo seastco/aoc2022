@@ -20,6 +20,6 @@ fun main() {
         return max
     }
 
-    val input = readInput("day01/input")
-    println(part1(input))
+    println(part1(readInput("day01/test")))
+    println(part1(readInput("day01/input")))
 }

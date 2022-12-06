@@ -20,6 +20,6 @@ fun main() {
         return totals.takeLast(3).sum()
     }
 
-    val input = readInput("day01/input")
-    println(part2(input))
+    println(part2(readInput("day01/test")))
+    println(part2(readInput("day01/input")))
 }
