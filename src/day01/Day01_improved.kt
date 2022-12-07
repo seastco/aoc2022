@@ -3,25 +3,23 @@ package day01
 import readText
 
 fun main() {
-    fun parseInput(input: String): List<List<Int>> {
-        return input.split("\n\n").map { elf -> elf.lines().map { it.toInt() }}
+    fun parseInput(input: String): List<Int> {
+        return input
+            .trim()
+            .split("\n\n")
+            .map { it.lines().sumOf(String::toInt) }
+            .sortedDescending()
     }
 
-    fun List<List<Int>>.topNElves(n: Int): Int {
-        return map { it.sum() }
-            .sortedDescending()
-            .take(n)
-            .sum()
-    }
 
     fun part1(input: String): Int {
-        val data = parseInput(input)
-        return data.topNElves(1)
+        val calories = parseInput(input)
+        return calories.first()
     }
 
     fun part2(input: String): Int {
-        val data = parseInput(input)
-        return data.topNElves(3)
+        val calories = parseInput(input)
+        return calories.take(3).sum()
     }
 
     println(part1(readText("day01/test")))
