@@ -3,23 +3,23 @@ package day02
 import readLines
 
 fun main() {
-    val outcomes: Map<String, Int> = java.util.Map.of(
-        "A X", 3,
-        "A Y", 4,
-        "A Z", 8,
-        "B X", 1,
-        "B Y", 5,
-        "B Z", 9,
-        "C X", 2,
-        "C Y", 6,
-        "C Z", 7,
+    val outcomes: MutableMap<String, Int> = hashMapOf(
+        "A X" to 3,
+        "A Y" to 4,
+        "A Z" to 8,
+        "B X" to 1,
+        "B Y" to 5,
+        "B Z" to 9,
+        "C X" to 2,
+        "C Y" to 6,
+        "C Z" to 7
     )
 
     fun part2(input: List<String>): Int {
         var score = 0
 
         for (game in input) {
-            score += outcomes.getOrDefault(game, 0)
+            score += outcomes.getValue(game)
         }
 
         return score
