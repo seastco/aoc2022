@@ -6,7 +6,6 @@ fun main() {
     fun part2(input: List<String>): Int {
         val totals = ArrayList<Int>()
         var total = 0
-
         for (calorie in input) {
             if (calorie.isEmpty()) {
                 totals.add(total)
@@ -15,6 +14,7 @@ fun main() {
                 total += calorie.toInt()
             }
         }
+        totals.add(total) // add final total to list
 
         totals.sort()
         return totals.takeLast(3).sum()
