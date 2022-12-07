@@ -1,6 +1,6 @@
 package day04
 
-import readInput
+import readLines
 
 fun main() {
     fun part1(pairs: List<String>): Int {
@@ -26,6 +26,6 @@ fun main() {
         return total
     }
 
-    println(part1(readInput("day04/test")))
-    println(part1(readInput("day04/input")))
+    println(part1(readLines("day04/test")))
+    println(part1(readLines("day04/input")))
 }

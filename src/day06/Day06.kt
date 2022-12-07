@@ -1,6 +1,6 @@
 package day06
 
-import readInput
+import readLines
 
 fun main() {
     fun find_marker(input: String, distinctCharCount: Int): Int {
@@ -40,8 +40,8 @@ fun main() {
         return input.indexOf(marker) + distinctCharCount
     }
 
-    println(find_marker(readInput("day06/test")[0], 4))
-    println(find_marker(readInput("day06/input")[0], 4))
-    println(find_marker(readInput("day06/test")[0], 14))
-    println(find_marker(readInput("day06/input")[0], 14))
+    println(find_marker(readLines("day06/test")[0], 4))
+    println(find_marker(readLines("day06/input")[0], 4))
+    println(find_marker(readLines("day06/test")[0], 14))
+    println(find_marker(readLines("day06/input")[0], 14))
 }

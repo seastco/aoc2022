@@ -1,6 +1,6 @@
 package day01
 
-import readInput
+import readLines
 import kotlin.math.max
 
 fun main() {
@@ -20,6 +20,6 @@ fun main() {
         return max
     }
 
-    println(part1(readInput("day01/test")))
-    println(part1(readInput("day01/input")))
+    println(part1(readLines("day01/test")))
+    println(part1(readLines("day01/input")))
 }

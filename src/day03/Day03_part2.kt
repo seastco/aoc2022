@@ -1,6 +1,6 @@
 package day03
 
-import readInput
+import readLines
 import kotlin.text.*
 
 fun main() {
@@ -19,6 +19,6 @@ fun main() {
         return total
     }
 
-    println(part2(readInput("day03/test")))
-    println(part2(readInput("day03/input")))
+    println(part2(readLines("day03/test")))
+    println(part2(readLines("day03/input")))
 }

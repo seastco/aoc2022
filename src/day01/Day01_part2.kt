@@ -1,6 +1,6 @@
 package day01
 
-import readInput
+import readLines
 
 fun main() {
     fun part2(input: List<String>): Int {
@@ -20,6 +20,6 @@ fun main() {
         return totals.takeLast(3).sum()
     }
 
-    println(part2(readInput("day01/test")))
-    println(part2(readInput("day01/input")))
+    println(part2(readLines("day01/test")))
+    println(part2(readLines("day01/input")))
 }

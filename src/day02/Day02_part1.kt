@@ -1,6 +1,6 @@
 package day02
 
-import readInput
+import readLines
 
 fun main() {
     val outcomes: Map<String, Int> = java.util.Map.of(
@@ -25,6 +25,6 @@ fun main() {
         return score
     }
 
-    println(part1(readInput("day02/test")))
-    println(part1(readInput("day02/input")))
+    println(part1(readLines("day02/test")))
+    println(part1(readLines("day02/input")))
 }

@@ -1,6 +1,6 @@
 package day03
 
-import readInput
+import readLines
 
 fun main() {
     fun part1(rucksacks: List<String>): Int {
@@ -18,6 +18,6 @@ fun main() {
         return total
     }
 
-    println(part1(readInput("day03/test")))
-    println(part1(readInput("day03/input")))
+    println(part1(readLines("day03/test")))
+    println(part1(readLines("day03/input")))
 }
