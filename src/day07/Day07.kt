@@ -19,7 +19,7 @@ fun main() {
                     directories.push(splitLine[2] + "_" + random())
                 }
             }
-            else if (splitLine[0].toIntOrNull() != null) {
+            else if (splitLine[0].toIntOrNull() != null) { // if file size
                 val size = splitLine[0].toInt()
 
                 for (directory in directories) {
