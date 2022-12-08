@@ -55,8 +55,8 @@ fun main() {
     }
 
     fun part2(input: List<String>): String {
-        var stacks = getCrateStacks(input)
-        var instructions = input[1].split("\n")
+        val stacks = getCrateStacks(input)
+        val instructions = input[1].split("\n")
 
         for (instruction in instructions) {
             val splitInstruction = instruction.split(" ")
