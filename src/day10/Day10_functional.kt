@@ -3,6 +3,11 @@ package day10
 import readLines
 import kotlin.math.absoluteValue
 
+/**
+ * Credit goes to tginsberg; experimenting with his solutions to better learn functional programming in Kotlin.
+ * Files without the _functional suffix are my original solutions.
+ */
+
 private fun parseInput(input: List<String>): List<Int> =
     buildList {
         add(1) // register starts at 1
