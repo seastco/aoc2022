@@ -15,11 +15,11 @@ private fun String.findStartMarker(startMarkerSize: Int): Int =
         }
         .last().index + 1 // grab the last character of that window and get its position by doing index + 1
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     return input.findStartMarker(4)
 }
 
-fun part2(input: String): Int {
+private fun part2(input: String): Int {
     return input.findStartMarker(14)
 }
 

@@ -46,7 +46,7 @@ private fun Array<IntArray>.scoreAt(row: Int, col: Int): Int =
             .takeUntil { it >= this[row][col] }.count() // count the result of takeUntil for direction
         }.product() // calculate the product of the results from the 4 directions
 
-fun part1(): Int {
+private fun part1(): Int {
     var visibleCount =
         (1 until rows - 1).sumOf { r -> // for each row...
             (1 until cols - 1).count { c -> // for each col...
@@ -59,7 +59,7 @@ fun part1(): Int {
     return visibleCount
 }
 
-fun part2(): Int {
+private fun part2(): Int {
     var scenicScore =
         (1 until rows - 1).maxOf { r -> // for each row...
             (1 until cols - 1).maxOf { c -> // for each col...

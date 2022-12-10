@@ -20,12 +20,12 @@ private infix fun IntRange.fullyOverlaps(other: IntRange): Boolean =
 private infix fun IntRange.overlaps(other: IntRange): Boolean =
     first <= other.last && other.first <= last
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val ranges: List<Pair<IntRange, IntRange>> = input.map { it.asRanges() }
     return ranges.count { it.first fullyOverlaps it.second || it.second fullyOverlaps it.first }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val ranges: List<Pair<IntRange, IntRange>> = input.map { it.asRanges() }
     return ranges.count { it.first overlaps it.second }
 }

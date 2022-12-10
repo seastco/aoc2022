@@ -29,13 +29,13 @@ private data class Point(val x: Int = 0, val y: Int = 0) {
         )
 }
 
-private fun followPath(knots: Int, path: String): Int {
-    val rope = Array(knots) { Point() }
+private fun followPath(path: String, knots: Int): Int {
+    val rope = Array(knots) { Point() } // initialize rope array with n=knots Points
     val tailVisits = mutableSetOf(Point())
 
     path.forEach { direction ->
         rope[0] = rope[0].move(direction)
-        rope.indices.windowed(2, 1) { (head, tail) ->
+        rope.indices.windowed(2, 1) { (head, tail) -> // use windowed to go through [0,1],[1,0]...[8,9]
             if (!rope[head].touches(rope[tail])) {
                 rope[tail] = rope[tail].moveTowards(rope[head])
             }
@@ -45,28 +45,14 @@ private fun followPath(knots: Int, path: String): Int {
     return tailVisits.size
 }
 
-private fun followPathToBeRefactored(path: String): Int {
-    var head = Point()
-    var tail = Point()
-    val tailVisits = mutableSetOf(Point())
-
-    path.forEach { direction ->
-        head = head.move(direction)
-        if (!head.touches(tail)) {
-            tail = tail.moveTowards(head)
-        }
-        tailVisits += tail
-    }
-    return tailVisits.size
-}
-
 private fun part1(input: List<String>): Int {
     val path: String = parseInput(input)
-    return 0
+    return followPath(path, 2)
 }
 
-fun part2(input: String) {
-
+private fun part2(input: List<String>): Int {
+    val path: String = parseInput(input)
+    return followPath(path, 10)
 }
 
 private fun parseInput(input: List<String>): String =
@@ -77,5 +63,6 @@ private fun parseInput(input: List<String>): String =
     }
 
 fun main() {
-    part1(readLines("day09/test1"))
+    println(part1(readLines("day09/test1")))
+    println(part2(readLines("day09/test2")))
 }

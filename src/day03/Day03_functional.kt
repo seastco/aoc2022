@@ -26,11 +26,11 @@ private fun String.sharedItem(): Char =
         substring(length / 2)
     ).sharedItem()
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return input.sumOf { it.sharedItem().priority() }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return input.chunked(3).sumOf { it.sharedItem().priority() }
 }
 

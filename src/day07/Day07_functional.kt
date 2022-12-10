@@ -49,12 +49,12 @@ private fun parseInput(input: List<String>): Directory {
     return callStack.last() // return root directory
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     val rootDirectory = parseInput(input)
     return rootDirectory.find { it.size <= 100_000 }.sumOf{ it.size }
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val rootDirectory = parseInput(input)
     val unusedSpace = 70_000_000 - rootDirectory.size
     val deficit = 30_000_000 - unusedSpace
