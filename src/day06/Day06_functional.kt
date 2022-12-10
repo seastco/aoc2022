@@ -2,6 +2,11 @@ package day06
 
 import readText
 
+/**
+ * Credit goes to tginsberg; experimenting with his solutions to better learn functional programming in Kotlin.
+ * Files without the _functional suffix are my original solutions.
+ */
+
 private fun String.findStartMarker(startMarkerSize: Int): Int =
     withIndex()
         .windowed(startMarkerSize, 1) // sliding window

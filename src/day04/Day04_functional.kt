@@ -2,6 +2,11 @@ package day04
 
 import readLines
 
+/**
+ * Credit goes to tginsberg; experimenting with his solutions to better learn functional programming in Kotlin.
+ * Files without the _functional suffix are my original solutions.
+ */
+
 private fun String.asIntRange(): IntRange =
     substringBefore("-").toInt()..substringAfter("-").toInt()
 

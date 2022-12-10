@@ -52,11 +52,11 @@ fun tailVisitedCount(input: List<String>, ropeLength: Int): Int {
     return set.size
 }
 
-fun part1(input: List<String>): Int {
+private fun part1(input: List<String>): Int {
     return tailVisitedCount(input, 2)
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     return tailVisitedCount(input, 10)
 }
 

@@ -2,6 +2,11 @@ package day01
 
 import readText
 
+/**
+ * Credit goes to tginsberg; experimenting with his solutions to better learn functional programming in Kotlin.
+ * Files without the _functional suffix are my original solutions.
+ */
+
 fun main() {
     fun parseInput(input: String): List<Int> {
         return input
@@ -10,7 +15,6 @@ fun main() {
             .map { it.lines().sumOf(String::toInt) }
             .sortedDescending()
     }
-
 
     fun part1(input: String): Int {
         val calories = parseInput(input)

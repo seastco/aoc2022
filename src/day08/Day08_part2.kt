@@ -58,7 +58,7 @@ fun traverseDown(forest: List<List<Int>>, i: Int, j: Int): Int {
     return count
 }
 
-fun part2(forest: List<List<Int>>): Int {
+private fun part2(forest: List<List<Int>>): Int {
     var max = 0
 
     for (i in forest.indices) {

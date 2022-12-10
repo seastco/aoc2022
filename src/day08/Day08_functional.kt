@@ -2,6 +2,12 @@ package day08
 
 import readLines
 
+
+/**
+ * Credit goes to tginsberg; experimenting with his solutions to better learn functional programming in Kotlin.
+ * Files without the _functional suffix are my original solutions.
+ */
+
 private val input: List<String> = readLines("day08/input")
 private val forest: Array<IntArray> = input.map { row -> row.map { it.digitToInt() }.toIntArray() }.toTypedArray()
 private val rows: Int = forest.size

@@ -111,7 +111,7 @@ fun traverseDownUp(forest: List<List<Tree>>): Int {
     return count
 }
 
-fun part1(forest: List<List<Tree>>): Int {
+private fun part1(forest: List<List<Tree>>): Int {
     var count = 0
 
     count += traverseBorders(forest)
