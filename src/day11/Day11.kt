@@ -59,11 +59,9 @@ private fun part1(input: String): Long {
         }
     }
 
-    val monkeyBusiness = monkeys
+    return monkeys
         .sortedByDescending { it.inspected }
-        .take(2)
-
-    return monkeyBusiness[0].inspected * monkeyBusiness[1].inspected
+        .let{ it[0].inspected * it[1].inspected }
 }
 
 private fun part2(input: String): Long {
@@ -83,11 +81,10 @@ private fun part2(input: String): Long {
         }
     }
 
-    val monkeyBusiness = monkeys
+    return monkeys
         .sortedByDescending { it.inspected }
         .take(2)
-
-    return monkeyBusiness[0].inspected * monkeyBusiness[1].inspected
+        .let{ it[0].inspected * it[1].inspected }
 }
 
 fun main() {
