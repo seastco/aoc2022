@@ -2,6 +2,11 @@ package day11
 
 import readLines
 
+/**
+ * Credit goes to tginsberg (https://github.com/tginsberg/advent-2022-kotlin)
+ * I'm experimenting with his solutions to better learn functional programming in Kotlin.
+ * Files without the _functional suffix are my original solutions.
+ */
 
 private class MonkeyV2(
     val items: MutableList<Long>,
