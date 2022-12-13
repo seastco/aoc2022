@@ -2,6 +2,10 @@ plugins {
     kotlin("jvm") version "1.7.22"
 }
 
+dependencies {
+    implementation("org.json:json:20220924")
+}
+
 repositories {
     mavenCentral()
 }
