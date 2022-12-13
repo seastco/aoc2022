@@ -4,8 +4,12 @@ import readLines
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
+
+
+
 /**
- * Credit goes to tginsberg; experimenting with his solutions to better learn functional programming in Kotlin.
+ * Credit goes to tginsberg (https://github.com/tginsberg/advent-2022-kotlin)
+ * I'm experimenting with his solutions to better learn functional programming in Kotlin.
  * Files without the _functional suffix are my original solutions.
  */
 
