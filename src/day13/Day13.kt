@@ -41,7 +41,7 @@ class Packet(val packet: JSONArray) : Comparable<Packet> {
     }
 }
 
-fun part1(input: String): Int {
+private fun part1(input: String): Int {
     val pairs = input
         .split("\n\n")
         .map { it.split("\n").map { packet -> Packet(JSONArray(packet)) } }.toMutableList()
@@ -54,7 +54,7 @@ fun part1(input: String): Int {
     return sum
 }
 
-fun part2(input: List<String>): Int {
+private fun part2(input: List<String>): Int {
     val packets = input
         .filter { it.isNotEmpty() }
         .flatMap { it.split("\n").map { packet -> Packet(JSONArray(packet)) } }
@@ -62,9 +62,7 @@ fun part2(input: List<String>): Int {
 
     val dividerPacket2 = Packet(JSONArray("[[2]]"))
     val dividerPacket6 = Packet(JSONArray("[[6]]"))
-    packets.add(dividerPacket2)
-    packets.add(dividerPacket6)
-    val sortedPackets = packets.sortedDescending()
+    val sortedPackets = (packets + dividerPacket2 + dividerPacket6).sortedDescending()
 
     return (sortedPackets.indexOf(dividerPacket2) + 1) * (sortedPackets.indexOf(dividerPacket6) + 1)
 }
