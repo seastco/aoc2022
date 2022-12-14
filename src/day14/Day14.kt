@@ -8,6 +8,9 @@ private class Grid(var grid: Array<Array<String>>, val minX: Int, val maxX: Int,
 
     companion object {
         fun of(input: List<String>, part2: Boolean): Grid {
+
+            // Parse 498,4 -> 498,6 -> 496,6 into [ [(498,4), (498,6)], [(498,6), (496,6)] ]
+            // The windowed approach gives us clear A -> B, B -> C ranges for drawing rock paths
             val rockPaths = input.map { line ->
                 line.split("->").map { pair ->
                     pair.trim()
@@ -25,6 +28,7 @@ private class Grid(var grid: Array<Array<String>>, val minX: Int, val maxX: Int,
             var maxY = Integer.MIN_VALUE
             var grid: Array<Array<String>>?
 
+            // Find min/max x/y boundaries so we can appropriately size the grid
             rockPaths.forEach { path ->
                 path.forEach { windowedPair ->
                     windowedPair.forEach { pair ->
@@ -36,17 +40,17 @@ private class Grid(var grid: Array<Array<String>>, val minX: Int, val maxX: Int,
             }
 
             grid = Array(maxY + 1) { Array(maxX - minX + 1) { "." } }
-            grid[0][500 - minX] = "+"
 
+            // Part2 has an "infinite" X-axis (I hardcoded 1000 which is sufficient) and an additional column
             if (part2) {
                 grid = Array(maxY + 2) { Array(maxX - minX + 1000) { "." } } // 1000 is our "infinite" X axis
-                grid[0][500 - minX] = "."
             }
 
             rockPaths.forEach { path ->
                 path.forEach { windowedPair ->
                     for (col in rangeBetween(windowedPair.first().first, windowedPair.last().first)) {
                         for (row in rangeBetween(windowedPair.first().second, windowedPair.last().second)) {
+                            // size & fill in the grid (size dependent on which part we're solving)
                             val i = row - (if (part2) 0 else minY)
                             val j = col - (if (part2) 0 else minX)
                             grid[i][j] = "#"
@@ -62,15 +66,19 @@ private class Grid(var grid: Array<Array<String>>, val minX: Int, val maxX: Int,
     }
 }
 
+// Part1 requires us to terminate once the sand falls out of the grid boundaries, hence terminateOutOfBonds=true
+// Part2 requires us to go until sand reaches the starting point, so we do not want to terminate when exceeding a boundary
 private fun dropSand(grid: Array<Array<String>>, x: Int, y: Int, terminateOutOfBounds: Boolean): Pair<Boolean, Int> {
     if (y >= grid.size || y < 0 || x >= grid[0].size || x < 0) {
-        return Pair(!terminateOutOfBounds, 0)
+        return Pair(!terminateOutOfBounds, 0) // off grid
     }
 
     if (grid[y][x] != ".") {
-        return Pair(true, 0)
+        return Pair(true, 0) // we hit a rock or sand, stop here
     }
 
+    // Drop sand down, left, and then right. Order matters!
+    // For P1, terminate the recursive stack if we exceed a boundary.
     val down = dropSand(grid, x, y + 1, terminateOutOfBounds)
     if (!down.first) {
         return Pair(false, down.second)
@@ -78,7 +86,7 @@ private fun dropSand(grid: Array<Array<String>>, x: Int, y: Int, terminateOutOfB
 
     val left = dropSand(grid, x - 1, y + 1, terminateOutOfBounds)
     if (!left.first) {
-        return Pair(false, down.second + left.second)
+        return Pair(false,  down.second + left.second)
     }
 
     val right = dropSand(grid, x + 1, y + 1, terminateOutOfBounds)
