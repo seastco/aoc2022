@@ -50,7 +50,7 @@ private class Grid(var grid: Array<Array<String>>, val minX: Int, val maxX: Int,
                 path.forEach { windowedPair ->
                     for (col in rangeBetween(windowedPair.first().first, windowedPair.last().first)) {
                         for (row in rangeBetween(windowedPair.first().second, windowedPair.last().second)) {
-                            // size & fill in the grid (size dependent on which part we're solving)
+                            // Size & fill in the grid (size dependent on which part we're solving for)
                             val i = row - (if (part2) 0 else minY)
                             val j = col - (if (part2) 0 else minX)
                             grid[i][j] = "#"
@@ -70,11 +70,13 @@ private class Grid(var grid: Array<Array<String>>, val minX: Int, val maxX: Int,
 // Part2 requires us to go until sand reaches the starting point, so we do not want to terminate when exceeding a boundary
 private fun dropSand(grid: Array<Array<String>>, x: Int, y: Int, terminateOutOfBounds: Boolean): Pair<Boolean, Int> {
     if (y >= grid.size || y < 0 || x >= grid[0].size || x < 0) {
-        return Pair(!terminateOutOfBounds, 0) // off grid
+        // Off grid, do not continue
+        return Pair(!terminateOutOfBounds, 0)
     }
 
     if (grid[y][x] != ".") {
-        return Pair(true, 0) // we hit a rock or sand, stop here
+        // We hit a rock or sand, do not continue
+        return Pair(true, 0)
     }
 
     // Drop sand down, left, and then right. Order matters!
