@@ -52,10 +52,13 @@ private fun part1(input: List<String>): Int {
         for ((sensor, beacon) in map.entries) {
             val distance = abs(sensor.x - beacon.x) + abs(sensor.y - beacon.y)
 
+            // exclude any sensor or beacon found on the 2,000,000th row
             if (i == sensor.x && sensor.y == 2_000_000 || i == beacon.x && beacon.y == 2_000_000) {
                 break
             }
 
+            // if the distance between sensor and coordinate is less than the sensor's manhattan
+            // distance, a beacon cannot be at this coordinate
             if (abs(i - sensor.x) + abs(2_000_000 - sensor.y) <= distance) {
                 count += 1
                 break
@@ -71,32 +74,43 @@ private fun part2(input: List<String>): Long {
     val sensorToBeaconDistance = mutableMapOf<Point2D, Int>()
 
     // Create new map of (Sensor, ManhattanDistance + 1). If we imagine a diamond perimeter
-    // around each sensor, the distress beacon will be +1 away from one of the perimeters.
+    // around each sensor, and given that there's only one possible solution, the distress
+    // beacon will be +1 away from a perimeter.
     for ((sensor, beacon) in sensorToBeaconMap.entries) {
         val distance = abs(sensor.x - beacon.x) + abs(sensor.y - beacon.y)
         sensorToBeaconDistance[sensor] = distance + 1
     }
 
-    // Valid range for the distress beacon to be
+    // The problem specifies that the beacon is within this range.
     val distressBeaconRange = 0..4_000_000
 
-    return sensorToBeaconDistance.firstNotNullOf {(sensor, distance) ->
+    return sensorToBeaconDistance.firstNotNullOf { (sensor, distance) ->
         (-distance..distance).firstNotNullOfOrNull { delta ->
             listOf(
-                Point2D(sensor.x + delta, sensor.y + (distance - delta)),
-                Point2D(sensor.x + delta, sensor.y + (distance + delta))
+                // imagine traversing diamond perimeter from left to right.
+                // we move across the x-axis and grab the corresponding +/- y axis.
+                Point2D(sensor.x + delta, (sensor.y - distance) - delta),
+                Point2D(sensor.x + delta, (sensor.y + distance) + delta)
             ).filter {
+                // filter out anything that isn't in the distress beacon range
                 it.x in distressBeaconRange && it.y in distressBeaconRange
             }.firstOrNull { point ->
+                // we found the distress beacon IF its abs distance to each sensor is >= the manhattan distance + 1
+                // (remember we added + 1 to each manhattan distance so we could traverse the perimeter)
                 sensorToBeaconDistance.all { (sensor, distance) ->
-                    abs(sensor.x - point.x) + abs(sensor.y - point.y) >= distance - 1
+                    abs(sensor.x - point.x) + abs(sensor.y - point.y) >= distance
                 }
             }
-        }?.let { it.x.toLong() * 4_000_000 + it.y }
+        }?.let {
+            // calculate the tuning frequency
+            it.x.toLong() * 4_000_000 + it.y
+        }
     }
 }
 
 fun main() {
+    //println(part1(readLines("day15/test")))
+    //println(part1(readLines("day15/test")))
     println(part1(readLines("day15/input")))
     println(part2(readLines("day15/input")))
 }
