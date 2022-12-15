@@ -66,97 +66,34 @@ private fun part1(input: List<String>): Int {
     return count
 }
 
-private fun part2(input: List<String>): Int {
-    val map = parseInput(input) // Map<Sensor, Beacon>
-    val intervalPairs = mutableSetOf<Pair<IntRange, IntRange>>()
+private fun part2(input: List<String>): Long {
+    val sensorToBeaconMap = parseInput(input)
+    val sensorToBeaconDistance = mutableMapOf<Point2D, Int>()
 
-    // Create set of interval pairs
-    for ((sensor, beacon) in map.entries) {
+    // Create new map of (Sensor, ManhattanDistance + 1). If we imagine a diamond perimeter
+    // around each sensor, the distress beacon will be +1 away from one of the perimeters.
+    for ((sensor, beacon) in sensorToBeaconMap.entries) {
         val distance = abs(sensor.x - beacon.x) + abs(sensor.y - beacon.y)
-
-        // Create xInterval (Sensor.x - distance, Sensor.y + distance)
-        // Adjust interval if outside of 0 or 4_000_000
-        var xInterval = sensor.x - distance..sensor.x + distance
-        if (xInterval.first < 0) xInterval = 0..xInterval.last
-        if (xInterval.last > 4_000_000) xInterval = xInterval.first..4_000_000
-
-        // Create yInterval (Sensor.y - distance, Sensor.y + distance)
-        // Adjust interval if outside of 0 or 4_000_000
-        var yInterval = sensor.y - distance..sensor.y + distance
-        if (yInterval.first < 0) yInterval = 0..yInterval.last
-        if (yInterval.last > 4_000_000) yInterval = yInterval.first..4_000_000
-
-        intervalPairs.add(Pair(xInterval, yInterval))
+        sensorToBeaconDistance[sensor] = distance + 1
     }
 
-    // For each interval...
-    for (pair in intervalPairs) {
-        var xInterval = pair.first
-        var yInterval = pair.second
+    // Valid range for the distress beacon to be
+    val distressBeaconRange = 0..4_000_000
 
-        for (x in xInterval) {
-            // traverse the top perimeter with x, yInterval.last + 1
-            var found = checkBorder(x, yInterval.last + 1, map)
-            if (found) {
-                return (x * 4_000_000) + (yInterval.last + 1)
+    return sensorToBeaconDistance.firstNotNullOf {(sensor, distance) ->
+        (-distance..distance).firstNotNullOfOrNull { delta ->
+            listOf(
+                Point2D(sensor.x + delta, sensor.y + (distance - delta)),
+                Point2D(sensor.x + delta, sensor.y + (distance + delta))
+            ).filter {
+                it.x in distressBeaconRange && it.y in distressBeaconRange
+            }.firstOrNull { point ->
+                sensorToBeaconDistance.all { (sensor, distance) ->
+                    abs(sensor.x - point.x) + abs(sensor.y - point.y) >= distance - 1
+                }
             }
-
-            // traverse the bottom perimeter with x, yInterval.first - 1
-            found = checkBorder(x, yInterval.first - 1, map)
-            if (found) {
-                return (x * 4_000_000) + (yInterval.first - 1)
-            }
-        }
-
-        for (y in yInterval) {
-            // traverse the left perimeter with xInterval.first - 1, y
-            var found = checkBorder(xInterval.first - 1, y, map)
-            if (found) {
-                return (xInterval.first - 1) * (4_000_000 + y)
-            }
-
-            // traverse the right perimeter with xInterval.last + 1, y
-            found = checkBorder(xInterval.last + 1, y, map)
-            if (found) {
-                return (xInterval.last + 1) * (4_000_000 + y)
-            }
-        }
-
-        // check corners?
-        var found = checkBorder(xInterval.first-1, yInterval.first-1, map)
-        if (found) {
-            println("OH SHIT")
-        }
-        found = checkBorder(xInterval.last+1, yInterval.first-1, map)
-        if (found) {
-            println("OH SHIT")
-        }
-        found = checkBorder(xInterval.first-1, yInterval.last+1, map)
-        if (found) {
-            println("OH SHIT")
-        }
-        found = checkBorder(xInterval.first+1, yInterval.last+1, map)
-        if (found) {
-            println("OH SHIT")
-        }
+        }?.let { it.x.toLong() * 4_000_000 + it.y }
     }
-
-    return -1
-}
-
-private fun checkBorder(x: Int, y: Int, map: Map<Point2D, Point2D>): Boolean {
-    // Calculate distance for between point and sensor, and compare with distance between sensor and beacon.
-    // If former is less than the latter, we fall within an existing perimeter.
-    for ((sensor, beacon) in map.entries) {
-        val sensorToBeaconDistance = abs(sensor.x - beacon.x) + abs(sensor.y - beacon.y)
-        val pointToSensorDistance = abs(x - sensor.x) + abs(y - sensor.y)
-
-        if (pointToSensorDistance <= sensorToBeaconDistance) {
-            return false
-        }
-    }
-
-    return true
 }
 
 fun main() {
