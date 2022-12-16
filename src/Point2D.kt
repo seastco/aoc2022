@@ -22,4 +22,7 @@ data class Point2D(val x: Int = 0, val y: Int = 0) {
         val steps = maxOf((x - other.x).absoluteValue, (y - other.y).absoluteValue)
         return (1..steps).scan(this) { last, _ -> Point2D(last.x + xDelta, last.y + yDelta) }
     }
+
+    fun distanceTo(other: Point2D): Int =
+        (x - other.x).absoluteValue + (y - other.y).absoluteValue
 }

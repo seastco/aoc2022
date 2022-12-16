@@ -6,9 +6,13 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-private fun parseInput(input: List<String>): Map<Point2D, Point2D> {
+private class Sensor(val location: Point2D, val closestBeacon: Point2D) {
+    var distance: Int = location.distanceTo(closestBeacon)
+}
+
+private fun parseInput(input: List<String>): Set<Sensor> {
     val pattern = "x=(-?\\d+), y=(-?\\d+)".toRegex()
-    val map = mutableMapOf<Point2D, Point2D>()
+    val set = mutableSetOf<Sensor>()
 
     for (line in input) {
         val matches = pattern.findAll(line).iterator()
@@ -25,41 +29,39 @@ private fun parseInput(input: List<String>): Map<Point2D, Point2D> {
         val y2 = second.groupValues[2].toInt()
         val beacon = Point2D(x2, y2)
 
-        map[sensor] = beacon
+        set.add(Sensor(sensor, beacon))
     }
 
-    return map
+    return set
 }
 
 private fun part1(input: List<String>): Int {
-    val map = parseInput(input)
+    val set = parseInput(input)
 
     var minX = Integer.MAX_VALUE
     var maxX = Integer.MIN_VALUE
     var maxDistance = Integer.MIN_VALUE
 
-    map.forEach {
-        val sensor = it.key
-        val beacon = it.value
+    set.forEach {
+        val sensor = it.location
         minX = min(minX, sensor.x)
-        maxX = max(maxX, beacon.x)
-        maxDistance = max(maxDistance, abs(sensor.x - beacon.x) + abs(sensor.x - beacon.y))
+        maxX = max(maxX, sensor.x)
+        maxDistance = max(maxDistance, it.distance)
     }
 
     var count = 0
 
     for (i in minX - maxDistance..maxX + maxDistance) {
-        for ((sensor, beacon) in map.entries) {
-            val distance = abs(sensor.x - beacon.x) + abs(sensor.y - beacon.y)
-
-            // exclude any sensor or beacon found on the 2,000,000th row
-            if (i == sensor.x && sensor.y == 2_000_000 || i == beacon.x && beacon.y == 2_000_000) {
+        for (sensor in set) {
+            // Exclude any sensor or beacon found on the 2,000,000th row
+            if (i == sensor.location.x && sensor.location.y == 2_000_000 ||
+                i == sensor.closestBeacon.x && sensor.closestBeacon.y == 2_000_000) {
                 break
             }
 
-            // if the distance between sensor and coordinate is less than the sensor's manhattan
+            // If the distance between sensor and coordinate is less than the sensor's manhattan
             // distance, a beacon cannot be at this coordinate
-            if (abs(i - sensor.x) + abs(2_000_000 - sensor.y) <= distance) {
+            if (abs(i - sensor.location.x) + abs(2_000_000 - sensor.location.y) <= sensor.distance) {
                 count += 1
                 break
             }
@@ -70,39 +72,37 @@ private fun part1(input: List<String>): Int {
 }
 
 private fun part2(input: List<String>): Long {
-    val sensorToBeaconMap = parseInput(input)
-    val sensorToBeaconDistance = mutableMapOf<Point2D, Int>()
+    val sensorSet = parseInput(input)
 
-    // Create new map of (Sensor, ManhattanDistance + 1). If we imagine a diamond perimeter
-    // around each sensor, and given that there's only one possible solution, the distress
-    // beacon will be +1 away from a perimeter.
-    for ((sensor, beacon) in sensorToBeaconMap.entries) {
-        val distance = abs(sensor.x - beacon.x) + abs(sensor.y - beacon.y)
-        sensorToBeaconDistance[sensor] = distance + 1
+    // Given that there's only ONE possible solution, the distress beacon is guaranteed
+    // to be +1 away from a perimeter. So we add +1 to each distance, which will help us
+    // calculate all possible coordinates for the distress beacon.
+    sensorSet.map {
+        it.distance += 1
     }
 
-    // The problem specifies that the beacon is within this range.
+    // The problem statement specifies that the distress beacon is within this range.
     val distressBeaconRange = 0..4_000_000
 
-    return sensorToBeaconDistance.firstNotNullOf { (sensor, distance) ->
-        (-distance..distance).firstNotNullOfOrNull { delta ->
+    return sensorSet.firstNotNullOf { sensor ->
+        (-sensor.distance..sensor.distance).firstNotNullOfOrNull { delta ->
             listOf(
-                // imagine traversing diamond perimeter from left to right.
-                // we move across the x-axis and grab the corresponding +/- y axis.
-                Point2D(sensor.x + delta, (sensor.y - distance) - delta),
-                Point2D(sensor.x + delta, (sensor.y + distance) + delta)
+                // Imagine traversing a diamond perimeter from left to right. To do so, we move across the
+                // x-axis from the leftmost point to the rightmost point while grabbing the corresponding +/- y axis.
+                Point2D(sensor.location.x + delta, (sensor.location.y - sensor.distance) - delta),
+                Point2D(sensor.location.x + delta, (sensor.location.y + sensor.distance) + delta)
             ).filter {
-                // filter out anything that isn't in the distress beacon range
+                // Filter out anything that isn't in the distress beacon range
                 it.x in distressBeaconRange && it.y in distressBeaconRange
             }.firstOrNull { point ->
-                // we found the distress beacon IF its abs distance to each sensor is >= the manhattan distance + 1
-                // (remember we added + 1 to each manhattan distance so we could traverse the perimeter)
-                sensorToBeaconDistance.all { (sensor, distance) ->
-                    abs(sensor.x - point.x) + abs(sensor.y - point.y) >= distance
+                // We found the distress beacon IF its abs distance to each sensor is >= the manhattan distance + 1
+                // (remember we added + 1 to each distance so we could traverse the perimeter)
+                sensorSet.all { sensor ->
+                    abs(sensor.location.x - point.x) + abs(sensor.location.y - point.y) >= sensor.distance
                 }
             }
         }?.let {
-            // calculate the tuning frequency
+            // Calculate the tuning frequency
             it.x.toLong() * 4_000_000 + it.y
         }
     }
